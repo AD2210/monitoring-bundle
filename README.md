@@ -19,3 +19,15 @@ using PSR-12-compatible rules.
 
 The test environment must provide a PHP coverage driver such as Xdebug or
 PCOV. The test command intentionally fails when coverage cannot be measured.
+
+## Application integration
+
+Register the bundle in `config/bundles.php`, then import its routes from the
+application routing configuration:
+
+```php
+$routes->import('@Ad2210MonitoringBundle/config/routes.php');
+```
+
+The first endpoint is `/_monitoring/health/live`. It accepts the optional
+`X-Monitoring-Token` header when `ad2210_monitoring.health.token` is configured.
