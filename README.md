@@ -26,7 +26,7 @@ Register the bundle in `config/bundles.php`, then import its routes from the
 application routing configuration:
 
 ```php
-$routes->import('@Ad2210MonitoringBundle/config/routes.php');
+$routes->import('@Ad2210MonitoringBundle/Resources/config/routes.php');
 ```
 
 The first endpoint is `/_monitoring/health/live`. It accepts the optional
