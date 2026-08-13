@@ -20,6 +20,10 @@ using PSR-12-compatible rules.
 The test environment must provide a PHP coverage driver such as Xdebug or
 PCOV. The test command intentionally fails when coverage cannot be measured.
 
+Development follows Git Flow: work is done on `feature/*` branches, merged into
+`develop`, and released through `release/*` branches. A release is not valid
+until the CI quality gate succeeds.
+
 ## Application integration
 
 Register the bundle in `config/bundles.php`, then import its routes from the
