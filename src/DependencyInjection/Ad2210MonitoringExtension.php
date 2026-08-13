@@ -30,6 +30,7 @@ final class Ad2210MonitoringExtension extends Extension
         $container->setParameter('ad2210_monitoring.application_name', $processedConfiguration['application_name']);
         $container->setParameter('ad2210_monitoring.environment', $processedConfiguration['environment']);
         $container->setParameter('ad2210_monitoring.health_token', $processedConfiguration['health']['token']);
+        $container->setParameter('ad2210_monitoring.metrics_token', $processedConfiguration['metrics']['token']);
 
         $loader = new PhpFileLoader($container, new FileLocator(__DIR__.'/../../config'));
         $loader->load('services.php');
@@ -65,6 +66,13 @@ final class Configuration implements ConfigurationInterface
                 ->scalarNode('application_name')->defaultValue('unknown')->cannotBeEmpty()->end()
                 ->scalarNode('environment')->defaultValue('prod')->cannotBeEmpty()->end()
                 ->arrayNode('health')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->booleanNode('enabled')->defaultTrue()->end()
+                        ->scalarNode('token')->defaultValue('')->end()
+                    ->end()
+                ->end()
+                ->arrayNode('metrics')
                     ->addDefaultsIfNotSet()
                     ->children()
                         ->booleanNode('enabled')->defaultTrue()->end()
