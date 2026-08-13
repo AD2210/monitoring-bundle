@@ -8,6 +8,8 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+use Symfony\Component\Config\FileLocator;
 
 /**
  * Defines and loads the ad2210 monitoring configuration.
@@ -27,6 +29,10 @@ final class Ad2210MonitoringExtension extends Extension
         $container->setParameter('ad2210_monitoring.enabled', $processedConfiguration['enabled']);
         $container->setParameter('ad2210_monitoring.application_name', $processedConfiguration['application_name']);
         $container->setParameter('ad2210_monitoring.environment', $processedConfiguration['environment']);
+        $container->setParameter('ad2210_monitoring.health_token', $processedConfiguration['health']['token']);
+
+        $loader = new PhpFileLoader($container, new FileLocator(__DIR__.'/../../config'));
+        $loader->load('services.php');
     }
 
     /**
@@ -58,6 +64,13 @@ final class Configuration implements ConfigurationInterface
                 ->booleanNode('enabled')->defaultTrue()->end()
                 ->scalarNode('application_name')->defaultValue('unknown')->cannotBeEmpty()->end()
                 ->scalarNode('environment')->defaultValue('prod')->cannotBeEmpty()->end()
+                ->arrayNode('health')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->booleanNode('enabled')->defaultTrue()->end()
+                        ->scalarNode('token')->defaultValue('')->end()
+                    ->end()
+                ->end()
             ->end();
 
         return $treeBuilder;
