@@ -30,4 +30,17 @@ final readonly class ApplicationHealthChecker implements HealthCheckerInterface
             checks: ['application' => 'ok'],
         );
     }
+
+    /**
+     * Returns the initial readiness result until dependency checks are added.
+     */
+    public function checkReadiness(): HealthReport
+    {
+        return new HealthReport(
+            status: 'ok',
+            application: $this->applicationName,
+            environment: $this->environment,
+            checks: ['application' => 'ok'],
+        );
+    }
 }

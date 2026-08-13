@@ -28,10 +28,35 @@ final readonly class HealthController
     #[Route('/_monitoring/health/live', name: 'ad2210_monitoring_health_live', methods: ['GET'])]
     public function live(Request $request): JsonResponse
     {
+        if (null !== $response = $this->authorize($request)) {
+            return $response;
+        }
+
+        return new JsonResponse($this->healthChecker->checkLiveness()->toArray());
+    }
+
+    /**
+     * Returns the readiness status of the application and its dependencies.
+     */
+    #[Route('/_monitoring/health/ready', name: 'ad2210_monitoring_health_ready', methods: ['GET'])]
+    public function ready(Request $request): JsonResponse
+    {
+        if (null !== $response = $this->authorize($request)) {
+            return $response;
+        }
+
+        return new JsonResponse($this->healthChecker->checkReadiness()->toArray());
+    }
+
+    /**
+     * Validates the configured monitoring token.
+     */
+    private function authorize(Request $request): ?JsonResponse
+    {
         if ('' !== $this->healthToken && !hash_equals($this->healthToken, (string) $request->headers->get('X-Monitoring-Token'))) {
             return new JsonResponse(['status' => 'unauthorized'], JsonResponse::HTTP_UNAUTHORIZED);
         }
 
-        return new JsonResponse($this->healthChecker->checkLiveness()->toArray());
+        return null;
     }
 }

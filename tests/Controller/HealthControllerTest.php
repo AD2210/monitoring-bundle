@@ -50,4 +50,18 @@ final class HealthControllerTest extends TestCase
 
         self::assertSame(200, $controller->live(Request::create('/_monitoring/health/live'))->getStatusCode());
     }
+
+    /**
+     * Ensures readiness uses the same authentication contract as liveness.
+     */
+    public function testReadyReturnsTheReadinessReport(): void
+    {
+        $controller = new HealthController(new ApplicationHealthChecker('demo-app', 'test'), 'secret');
+        $request = Request::create('/_monitoring/health/ready', server: ['HTTP_X_MONITORING_TOKEN' => 'secret']);
+
+        $response = $controller->ready($request);
+
+        self::assertSame(200, $response->getStatusCode());
+        self::assertSame('ok', json_decode((string) $response->getContent(), true)['status']);
+    }
 }

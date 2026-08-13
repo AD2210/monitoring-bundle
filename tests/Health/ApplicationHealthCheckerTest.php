@@ -26,4 +26,14 @@ final class ApplicationHealthCheckerTest extends TestCase
             'checks' => ['application' => 'ok'],
         ], $checker->checkLiveness()->toArray());
     }
+
+    /**
+     * Ensures readiness currently reports the application as available.
+     */
+    public function testReadinessReturnsTheApplicationStatus(): void
+    {
+        $checker = new ApplicationHealthChecker('demo-app', 'test');
+
+        self::assertSame('ok', $checker->checkReadiness()->status);
+    }
 }
