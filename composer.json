@@ -1,0 +1,43 @@
+{
+    "name": "ad2210/monitoring-bundle",
+    "description": "Symfony integration for application monitoring.",
+    "type": "symfony-bundle",
+    "license": "proprietary",
+    "require": {
+        "php": ">=8.4",
+        "symfony/config": "^8.1",
+        "symfony/dependency-injection": "^8.1",
+        "symfony/framework-bundle": "^8.1",
+        "symfony/http-kernel": "^8.1"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3",
+        "phpstan/phpstan": "^2",
+        "phpunit/phpunit": "^11"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ad2210\\MonitoringBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Ad2210\\MonitoringBundle\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "symfony": {
+            "allow-contrib": false
+        }
+    },
+    "scripts": {
+        "test": "phpdbg -qrr vendor/bin/phpunit --coverage-text --coverage-clover coverage.xml --coverage-filter src && php tests/check-coverage.php",
+        "phpstan": "phpstan analyse --level=8 src tests",
+        "cs-check": "php-cs-fixer fix --dry-run --diff --sequential",
+        "qa": [
+            "@test",
+            "@phpstan",
+            "@cs-check"
+        ]
+    }
+}
