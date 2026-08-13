@@ -23,7 +23,7 @@ final class RouteConfigurationTest extends TestCase
      */
     public function testBundleRoutesCanBeImported(): void
     {
-        $locator = new FileLocator(__DIR__.'/../config');
+        $locator = new FileLocator(__DIR__.'/../src/Resources/config');
         $attributeClassLoader = new class () extends AttributeClassLoader {
             /**
              * @param \ReflectionClass<object> $class
