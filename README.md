@@ -16,3 +16,6 @@ composer qa
 
 The gate includes PHPUnit with at least 90% coverage, PHPStan, and PHP-CS-Fixer
 using PSR-12-compatible rules.
+
+The test environment must provide a PHP coverage driver such as Xdebug or
+PCOV. The test command intentionally fails when coverage cannot be measured.

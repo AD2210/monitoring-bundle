@@ -31,7 +31,7 @@
         }
     },
     "scripts": {
-        "test": "phpdbg -qrr vendor/bin/phpunit --coverage-text --coverage-clover coverage.xml --coverage-filter src && php tests/check-coverage.php",
+        "test": "php vendor/bin/phpunit --coverage-text --coverage-clover coverage.xml --coverage-filter src && php tests/check-coverage.php",
         "phpstan": "phpstan analyse --level=8 src tests",
         "cs-check": "php-cs-fixer fix --dry-run --diff --sequential",
         "qa": [
