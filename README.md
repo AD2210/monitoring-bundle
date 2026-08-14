@@ -46,3 +46,13 @@ The health endpoint accepts the `X-Monitoring-Token` header when
 Readiness checks implement `ReadinessCheckInterface` and are registered with
 the `ad2210_monitoring.readiness_check` service tag. A failed check returns
 HTTP 503 while internal failure details remain in application logs.
+
+The heartbeat command emits a transport-neutral JSON payload:
+
+```bash
+bin/console monitoring:heartbeat
+```
+
+It can be called by a worker supervisor, cron or systemd timer. Delivery to a
+central monitoring endpoint remains outside the bundle so applications do not
+need a persistence or transport coupling.
