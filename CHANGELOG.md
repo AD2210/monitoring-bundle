@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.2
+
+- Fixed explicit registration of the heartbeat console command.
+
 ## 0.2.1
 
 - Fixed registration of the `monitoring:heartbeat` console command.

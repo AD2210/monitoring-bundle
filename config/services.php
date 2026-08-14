@@ -44,7 +44,8 @@ return static function (ContainerConfigurator $container): void {
         ->arg('$environment', '%ad2210_monitoring.environment%')
         ->arg('$version', '%ad2210_monitoring.version%');
 
-    $services->set(HeartbeatCommand::class);
+    $services->set(HeartbeatCommand::class)
+        ->tag('console.command', ['command' => 'monitoring:heartbeat']);
 
     $services->alias(MetricsProviderInterface::class, ApplicationMetricsProvider::class);
 
