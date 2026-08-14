@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.0
+
+- Added `monitoring:heartbeat` for worker and scheduler integrations.
+- Added application version to the heartbeat payload.
+- Added extensible readiness checks with safe failure handling.
+- Added HTTP 503 responses for failed readiness checks.
+
 ## 0.1.0
 
 - Added Symfony bundle bootstrap and typed configuration.
