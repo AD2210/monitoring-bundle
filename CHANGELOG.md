@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.1
+
+- Fixed registration of the `monitoring:heartbeat` console command.
+
 ## 0.2.0
 
 - Added `monitoring:heartbeat` for worker and scheduler integrations.
