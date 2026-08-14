@@ -29,7 +29,7 @@ final readonly class MetricsController
     public function __invoke(Request $request): Response
     {
         if ('' !== $this->metricsToken && !hash_equals($this->metricsToken, (string) $request->headers->get('X-Monitoring-Token'))) {
-            return new Response('Unauthorized\n', Response::HTTP_UNAUTHORIZED, ['Content-Type' => 'text/plain; charset=utf-8']);
+            return new Response("Unauthorized\n", Response::HTTP_UNAUTHORIZED, ['Content-Type' => 'text/plain; charset=utf-8']);
         }
 
         return new Response($this->metricsProvider->render(), Response::HTTP_OK, [
