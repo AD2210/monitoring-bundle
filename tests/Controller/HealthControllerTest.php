@@ -21,7 +21,7 @@ final class HealthControllerTest extends TestCase
      */
     public function testInvalidTokenIsRejected(): void
     {
-        $controller = new HealthController($this->healthChecker(), 'secret');
+        $controller = new HealthController($this->healthChecker(), true, 'secret');
 
         $response = $controller->live(Request::create('/_monitoring/health/live'));
 
@@ -34,7 +34,7 @@ final class HealthControllerTest extends TestCase
      */
     public function testValidTokenReturnsHealthReport(): void
     {
-        $controller = new HealthController($this->healthChecker(), 'secret');
+        $controller = new HealthController($this->healthChecker(), true, 'secret');
         $request = Request::create('/_monitoring/health/live', server: ['HTTP_X_MONITORING_TOKEN' => 'secret']);
 
         $response = $controller->live($request);
@@ -48,7 +48,7 @@ final class HealthControllerTest extends TestCase
      */
     public function testEmptyTokenAllowsTheRequest(): void
     {
-        $controller = new HealthController($this->healthChecker(), '');
+        $controller = new HealthController($this->healthChecker(), true, '');
 
         self::assertSame(200, $controller->live(Request::create('/_monitoring/health/live'))->getStatusCode());
     }
@@ -58,13 +58,23 @@ final class HealthControllerTest extends TestCase
      */
     public function testReadyReturnsTheReadinessReport(): void
     {
-        $controller = new HealthController($this->healthChecker(), 'secret');
+        $controller = new HealthController($this->healthChecker(), true, 'secret');
         $request = Request::create('/_monitoring/health/ready', server: ['HTTP_X_MONITORING_TOKEN' => 'secret']);
 
         $response = $controller->ready($request);
 
         self::assertSame(200, $response->getStatusCode());
         self::assertSame('ok', json_decode((string) $response->getContent(), true)['status']);
+    }
+
+    /**
+     * Ensures disabled health endpoints are not exposed.
+     */
+    public function testDisabledHealthReturnsNotFound(): void
+    {
+        $controller = new HealthController($this->healthChecker(), false, '');
+
+        self::assertSame(404, $controller->live(Request::create('/_monitoring/health/live'))->getStatusCode());
     }
 
     /**

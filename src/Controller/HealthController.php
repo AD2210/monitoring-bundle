@@ -18,6 +18,7 @@ final readonly class HealthController
 {
     public function __construct(
         private HealthCheckerInterface $healthChecker,
+        private bool $enabled,
         private string $healthToken,
     ) {
     }
@@ -28,6 +29,10 @@ final readonly class HealthController
     #[Route('/_monitoring/health/live', name: 'ad2210_monitoring_health_live', methods: ['GET'])]
     public function live(Request $request): JsonResponse
     {
+        if (!$this->enabled) {
+            return new JsonResponse(null, JsonResponse::HTTP_NOT_FOUND);
+        }
+
         if (null !== $response = $this->authorize($request)) {
             return $response;
         }
@@ -41,6 +46,10 @@ final readonly class HealthController
     #[Route('/_monitoring/health/ready', name: 'ad2210_monitoring_health_ready', methods: ['GET'])]
     public function ready(Request $request): JsonResponse
     {
+        if (!$this->enabled) {
+            return new JsonResponse(null, JsonResponse::HTTP_NOT_FOUND);
+        }
+
         if (null !== $response = $this->authorize($request)) {
             return $response;
         }
