@@ -33,5 +33,16 @@ application routing configuration:
 $routes->import('@Ad2210MonitoringBundle/Resources/config/routes.php');
 ```
 
-The first endpoint is `/_monitoring/health/live`. It accepts the optional
-`X-Monitoring-Token` header when `ad2210_monitoring.health.token` is configured.
+The health endpoints are:
+
+- `/_monitoring/health/live` for process liveness;
+- `/_monitoring/health/ready` for application and dependency readiness;
+- `/_monitoring/metrics` for Prometheus exposition.
+
+The health endpoint accepts the `X-Monitoring-Token` header when
+`ad2210_monitoring.health.token` is configured. Metrics use the independent
+`ad2210_monitoring.metrics.token` option.
+
+Readiness checks implement `ReadinessCheckInterface` and are registered with
+the `ad2210_monitoring.readiness_check` service tag. A failed check returns
+HTTP 503 while internal failure details remain in application logs.
