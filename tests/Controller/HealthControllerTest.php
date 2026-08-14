@@ -6,6 +6,8 @@ namespace Ad2210\MonitoringBundle\Tests\Controller;
 
 use Ad2210\MonitoringBundle\Controller\HealthController;
 use Ad2210\MonitoringBundle\Health\ApplicationHealthChecker;
+use Ad2210\MonitoringBundle\Health\ApplicationReadinessCheck;
+use Ad2210\MonitoringBundle\Health\ReadinessChecker;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -19,7 +21,7 @@ final class HealthControllerTest extends TestCase
      */
     public function testInvalidTokenIsRejected(): void
     {
-        $controller = new HealthController(new ApplicationHealthChecker('demo-app', 'test'), 'secret');
+        $controller = new HealthController($this->healthChecker(), 'secret');
 
         $response = $controller->live(Request::create('/_monitoring/health/live'));
 
@@ -32,7 +34,7 @@ final class HealthControllerTest extends TestCase
      */
     public function testValidTokenReturnsHealthReport(): void
     {
-        $controller = new HealthController(new ApplicationHealthChecker('demo-app', 'test'), 'secret');
+        $controller = new HealthController($this->healthChecker(), 'secret');
         $request = Request::create('/_monitoring/health/live', server: ['HTTP_X_MONITORING_TOKEN' => 'secret']);
 
         $response = $controller->live($request);
@@ -46,7 +48,7 @@ final class HealthControllerTest extends TestCase
      */
     public function testEmptyTokenAllowsTheRequest(): void
     {
-        $controller = new HealthController(new ApplicationHealthChecker('demo-app', 'test'), '');
+        $controller = new HealthController($this->healthChecker(), '');
 
         self::assertSame(200, $controller->live(Request::create('/_monitoring/health/live'))->getStatusCode());
     }
@@ -56,12 +58,20 @@ final class HealthControllerTest extends TestCase
      */
     public function testReadyReturnsTheReadinessReport(): void
     {
-        $controller = new HealthController(new ApplicationHealthChecker('demo-app', 'test'), 'secret');
+        $controller = new HealthController($this->healthChecker(), 'secret');
         $request = Request::create('/_monitoring/health/ready', server: ['HTTP_X_MONITORING_TOKEN' => 'secret']);
 
         $response = $controller->ready($request);
 
         self::assertSame(200, $response->getStatusCode());
         self::assertSame('ok', json_decode((string) $response->getContent(), true)['status']);
+    }
+
+    /**
+     * Builds the default health checker used by controller tests.
+     */
+    private function healthChecker(): ApplicationHealthChecker
+    {
+        return new ApplicationHealthChecker('demo-app', 'test', new ReadinessChecker([new ApplicationReadinessCheck()]));
     }
 }

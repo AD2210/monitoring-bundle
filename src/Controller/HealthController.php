@@ -45,7 +45,10 @@ final readonly class HealthController
             return $response;
         }
 
-        return new JsonResponse($this->healthChecker->checkReadiness()->toArray());
+        $report = $this->healthChecker->checkReadiness();
+        $statusCode = 'ok' === $report->status ? JsonResponse::HTTP_OK : JsonResponse::HTTP_SERVICE_UNAVAILABLE;
+
+        return new JsonResponse($report->toArray(), $statusCode);
     }
 
     /**

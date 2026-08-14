@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Ad2210\MonitoringBundle\Tests\Health;
 
 use Ad2210\MonitoringBundle\Health\ApplicationHealthChecker;
+use Ad2210\MonitoringBundle\Health\ApplicationReadinessCheck;
+use Ad2210\MonitoringBundle\Health\ReadinessChecker;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -17,7 +19,7 @@ final class ApplicationHealthCheckerTest extends TestCase
      */
     public function testLivenessDoesNotDependOnExternalServices(): void
     {
-        $checker = new ApplicationHealthChecker('demo-app', 'test');
+        $checker = new ApplicationHealthChecker('demo-app', 'test', new ReadinessChecker([new ApplicationReadinessCheck()]));
 
         self::assertSame([
             'status' => 'ok',
@@ -32,7 +34,7 @@ final class ApplicationHealthCheckerTest extends TestCase
      */
     public function testReadinessReturnsTheApplicationStatus(): void
     {
-        $checker = new ApplicationHealthChecker('demo-app', 'test');
+        $checker = new ApplicationHealthChecker('demo-app', 'test', new ReadinessChecker([new ApplicationReadinessCheck()]));
 
         self::assertSame('ok', $checker->checkReadiness()->status);
     }

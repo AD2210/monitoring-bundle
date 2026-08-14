@@ -12,6 +12,7 @@ final readonly class ApplicationHealthChecker implements HealthCheckerInterface
     public function __construct(
         private string $applicationName,
         private string $environment,
+        private ReadinessChecker $readinessChecker,
     ) {
     }
 
@@ -36,11 +37,13 @@ final readonly class ApplicationHealthChecker implements HealthCheckerInterface
      */
     public function checkReadiness(): HealthReport
     {
+        $readiness = $this->readinessChecker->check();
+
         return new HealthReport(
-            status: 'ok',
+            status: $readiness['status'],
             application: $this->applicationName,
             environment: $this->environment,
-            checks: ['application' => 'ok'],
+            checks: $readiness['checks'],
         );
     }
 }
