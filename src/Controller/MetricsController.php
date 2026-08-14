@@ -18,6 +18,7 @@ final readonly class MetricsController
 {
     public function __construct(
         private MetricsProviderInterface $metricsProvider,
+        private bool $enabled,
         private string $metricsToken,
     ) {
     }
@@ -28,6 +29,10 @@ final readonly class MetricsController
     #[Route('/_monitoring/metrics', name: 'ad2210_monitoring_metrics', methods: ['GET'])]
     public function __invoke(Request $request): Response
     {
+        if (!$this->enabled) {
+            return new Response('', Response::HTTP_NOT_FOUND);
+        }
+
         if ('' !== $this->metricsToken && !hash_equals($this->metricsToken, (string) $request->headers->get('X-Monitoring-Token'))) {
             return new Response("Unauthorized\n", Response::HTTP_UNAUTHORIZED, ['Content-Type' => 'text/plain; charset=utf-8']);
         }

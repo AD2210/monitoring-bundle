@@ -33,6 +33,7 @@ return static function (ContainerConfigurator $container): void {
     $services->alias(Ad2210\MonitoringBundle\Health\HealthCheckerInterface::class, ApplicationHealthChecker::class);
 
     $services->set(HealthController::class)
+        ->arg('$enabled', '%ad2210_monitoring.health_enabled%')
         ->arg('$healthToken', '%ad2210_monitoring.health_token%');
 
     $services->set(ApplicationMetricsProvider::class)
@@ -50,5 +51,6 @@ return static function (ContainerConfigurator $container): void {
     $services->alias(MetricsProviderInterface::class, ApplicationMetricsProvider::class);
 
     $services->set(MetricsController::class)
+        ->arg('$enabled', '%ad2210_monitoring.metrics_enabled%')
         ->arg('$metricsToken', '%ad2210_monitoring.metrics_token%');
 };
