@@ -29,6 +29,7 @@ final class Ad2210MonitoringExtension extends Extension
         $container->setParameter('ad2210_monitoring.enabled', $processedConfiguration['enabled']);
         $container->setParameter('ad2210_monitoring.application_name', $processedConfiguration['application_name']);
         $container->setParameter('ad2210_monitoring.environment', $processedConfiguration['environment']);
+        $container->setParameter('ad2210_monitoring.version', $processedConfiguration['version']);
         $container->setParameter('ad2210_monitoring.health_token', $processedConfiguration['health']['token']);
         $container->setParameter('ad2210_monitoring.metrics_token', $processedConfiguration['metrics']['token']);
 
@@ -65,6 +66,7 @@ final class Configuration implements ConfigurationInterface
                 ->booleanNode('enabled')->defaultTrue()->end()
                 ->scalarNode('application_name')->defaultValue('unknown')->cannotBeEmpty()->end()
                 ->scalarNode('environment')->defaultValue('prod')->cannotBeEmpty()->end()
+                ->scalarNode('version')->defaultValue('unknown')->cannotBeEmpty()->end()
                 ->arrayNode('health')
                     ->addDefaultsIfNotSet()
                     ->children()

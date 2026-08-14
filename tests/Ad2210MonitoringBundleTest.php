@@ -39,6 +39,7 @@ final class Ad2210MonitoringBundleTest extends TestCase
         self::assertTrue($container->getParameter('ad2210_monitoring.enabled'));
         self::assertSame('unknown', $container->getParameter('ad2210_monitoring.application_name'));
         self::assertSame('prod', $container->getParameter('ad2210_monitoring.environment'));
+        self::assertSame('unknown', $container->getParameter('ad2210_monitoring.version'));
         self::assertSame('', $container->getParameter('ad2210_monitoring.health_token'));
         self::assertSame('', $container->getParameter('ad2210_monitoring.metrics_token'));
     }
