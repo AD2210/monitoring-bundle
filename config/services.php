@@ -7,6 +7,7 @@ use Ad2210\MonitoringBundle\Health\ApplicationHealthChecker;
 use Ad2210\MonitoringBundle\Health\ApplicationReadinessCheck;
 use Ad2210\MonitoringBundle\Health\ReadinessChecker;
 use Ad2210\MonitoringBundle\Heartbeat\HeartbeatProvider;
+use Ad2210\MonitoringBundle\Command\HeartbeatCommand;
 use Ad2210\MonitoringBundle\Controller\MetricsController;
 use Ad2210\MonitoringBundle\Metrics\ApplicationMetricsProvider;
 use Ad2210\MonitoringBundle\Metrics\MetricsProviderInterface;
@@ -42,6 +43,8 @@ return static function (ContainerConfigurator $container): void {
         ->arg('$applicationName', '%ad2210_monitoring.application_name%')
         ->arg('$environment', '%ad2210_monitoring.environment%')
         ->arg('$version', '%ad2210_monitoring.version%');
+
+    $services->set(HeartbeatCommand::class);
 
     $services->alias(MetricsProviderInterface::class, ApplicationMetricsProvider::class);
 
