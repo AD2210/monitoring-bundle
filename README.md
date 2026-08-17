@@ -26,6 +26,11 @@ until the CI quality gate succeeds.
 
 ## Application integration
 
+The complete local development procedure is available in
+[docs/dev-integration.md](docs/dev-integration.md). It covers a local path
+repository, bundle registration, routes, environment variables, Docker,
+Prometheus and manual endpoint checks.
+
 Register the bundle in `config/bundles.php`, then import its routes from the
 application routing configuration:
 
@@ -56,3 +61,9 @@ bin/console monitoring:heartbeat
 It can be called by a worker supervisor, cron or systemd timer. Delivery to a
 central monitoring endpoint remains outside the bundle so applications do not
 need a persistence or transport coupling.
+
+The bundle currently provides the common health, metrics and heartbeat
+contracts. It does not automatically instrument Mercure, Messenger or
+Scheduler. Those components must be checked by application-specific
+ReadinessCheckInterface implementations; dedicated metrics and worker
+heartbeat integrations can be added without changing the HTTP contract.
